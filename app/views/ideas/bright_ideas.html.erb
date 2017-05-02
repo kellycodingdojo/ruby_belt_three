@@ -1,0 +1,47 @@
+<style>
+	td{
+		width: 200px;
+	}
+	table{
+		margin-left: 50px;
+	}
+	.word{
+			border: 2px solid black;
+	}
+
+
+</style>
+
+<p>Welcome, <%= @user.name%>!</p>
+
+<a href="/sessions/<%= @user.id %>" data-method="DELETE">Logout</a>
+
+<form action="/ideas" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <p>New Idea:</p>
+  <textarea name="idea[content]" id="Content" rows="2" cols="80"></textarea>
+  <input type="submit" name="Create Idea" value="Post Something Witty">
+</form>
+
+
+
+<% @idea.reverse.each do |think| %>
+<table>
+	<tr>
+		<td><a href= "/users/<%= @user.id%>" data-method="POST"> <%= think.user.name %> </a>  Says:</td> 
+		<td class="word"><%= think.content %></td>
+
+  	</tr>
+  	<tr>
+	  	<td>
+		    <form action="/likes" method="post">
+		      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+		      <input type="hidden" name="like[idea_id]" value="<%= think.id%>">
+		      <input type="submit" name="Like" value="Like">
+		    </form>
+		</td> 
+	    <td><a href="/bright_ideas/<%=think.id%>" data-method="POST"> <%= think.likes.count %> :People </a> like this </td>
+   		
+	</tr>
+</table>
+  <% end %>
